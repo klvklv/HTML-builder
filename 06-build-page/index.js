@@ -1,16 +1,16 @@
 const fs = require('fs');
-const sourcedir = './06-build-page/assets/';
-const destdir = './06-build-page/project-dist/assets/';
+const sourcedir = __dirname + '/assets/';
+const destdir = __dirname + '/project-dist/assets/';
 const path = require('path');
 const readline = require('readline');
 
 async function createBundle() {
-  const writerFile = fs.createWriteStream('./06-build-page/project-dist/style.css', {flags: 'w'});
-  for(let file of await fs.promises.readdir('./06-build-page/styles/', {withFileTypes: true})){
+  const writerFile = fs.createWriteStream(__dirname + '/project-dist/style.css', {flags: 'w'});
+  for(let file of await fs.promises.readdir(__dirname + '/styles/', {withFileTypes: true})){
     if (!file.isDirectory()) {
       let f = path.parse(file.name);
       if(f.ext === '.css') {
-        const readStream = fs.ReadStream('./06-build-page/styles/' + file.name);
+        const readStream = fs.ReadStream(__dirname + '/styles/' + file.name);
         readStream.on('data', async (chunk) => {
           writerFile.write(chunk);
         });
@@ -35,8 +35,8 @@ async function copyDir(from, to) {
 }
 
 async function createHtml() {
-  const writerFile = fs.createWriteStream('./06-build-page/project-dist/index.html', {flags: 'w'});
-  const readStream = fs.createReadStream('./06-build-page/template.html');
+  const writerFile = fs.createWriteStream(__dirname + '/project-dist/index.html', {flags: 'w'});
+  const readStream = fs.createReadStream(__dirname + '/template.html');
   const rl = readline.createInterface({
     input: readStream,
     crlfDelay: Infinity
@@ -53,7 +53,7 @@ async function createHtml() {
   }
 
   async function insertFragment(file) {
-    const readFragment = fs.ReadStream('./06-build-page/components/' + file + '.html');
+    const readFragment = fs.ReadStream(__dirname + '/components/' + file + '.html');
     readFragment.on('data', async (chunk) => {
       writerFile.write(chunk);
     });

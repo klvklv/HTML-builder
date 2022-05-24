@@ -10,6 +10,7 @@ async function createBundle() {
         const readStream = fs.ReadStream('05-merge-styles\\styles\\' + file.name);
         readStream.on('data', async (chunk) => {
           writerFile.write(chunk);
+          writerFile.write('\r\n');
         });
       }
     }

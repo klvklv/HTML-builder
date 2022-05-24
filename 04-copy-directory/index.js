@@ -1,6 +1,6 @@
 const fs = require('fs');
-const sourcedir = './04-copy-directory/files/';
-const destdir = './04-copy-directory/files-copy/';
+const sourcedir = __dirname + '/files/';
+const destdir = __dirname + '/files-copy/';
 
 async function copyDir(from, to) {
   await fs.promises.mkdir(to, { recursive: true }).catch(console.error);
