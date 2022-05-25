@@ -19,7 +19,7 @@ async function copyDir(from, to) {
 
 try {
   ( async () => {
-    await fs.promises.rmdir(destdir, { recursive: true }).catch(console.error);
+    await fs.promises.rm(destdir, { recursive: true, force: true }).catch(console.error);
     copyDir(sourcedir, destdir);
   })();
 } catch {

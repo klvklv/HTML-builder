@@ -46,23 +46,23 @@ async function createHtml() {
     const closeBrackets = line.indexOf('}}');
     if(openBrackets >= 0 && closeBrackets > openBrackets) {
       const fragmentName = line.substring(openBrackets + 2, closeBrackets);
-      insertFragment(fragmentName);
+      await insertFragment(fragmentName);
     }
     else 
-      writerFile.write(line + '\r\n');
+      await writerFile.write(line + '\r\n');
   }
 
   async function insertFragment(file) {
-    const readFragment = fs.ReadStream(__dirname + '/components/' + file + '.html');
-    readFragment.on('data', async (chunk) => {
-      writerFile.write(chunk);
-    });
+    const readFragment = await fs.promises.readFile(__dirname + '/components/' + file + '.html');
+    await writerFile.write(readFragment);
+    await writerFile.write('\r\n');
   }
+
 }
 
 try {
   ( async () => {
-    await fs.promises.rmdir(destdir, { recursive: true }).catch(console.error);
+    await fs.promises.rm(destdir, { recursive: true, force: true }).catch(console.error);
     await copyDir(sourcedir, destdir);
     await createBundle();
     await createHtml();
